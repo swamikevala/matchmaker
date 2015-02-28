@@ -1,0 +1,6 @@
+{ 
+	"main": "queryServer.js",
+	"description": "Phosphorus Javascript module for processing match queries",
+	"author": "Swami Kevala",
+	"includes": "org.ishafoundation~phosphorus.fdb~0.0.1" 
+}

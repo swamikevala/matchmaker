@@ -3,7 +3,7 @@ var console = require('vertx/console');
 var container = require('vertx/container');
 var eb = vertx.eventBus;
 
-container.deployModule("org.ishafoundation~me_fdb~0.0.1");
+container.deployModule("org.ishafoundation~phosphorus.fdb~0.0.1");
 
 vertx.createHttpServer().requestHandler(function(req) {
 

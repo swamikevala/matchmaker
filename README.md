@@ -1,7 +1,7 @@
 # phosphorus
 Real time record matching engine
 
-28/02/2015: Initial POC 
+28/02/2015: Initial POC  
 vert.x : 2.1.5 / FoundationDB : 3.0.7 / FDB Java API : 3.0.2
 
 Only blocking implemented 

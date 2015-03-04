@@ -1,7 +1,0 @@
-{ 
-	"main": "org/ishafoundation/fdb/FDBDatabase.java",
-	"description": "Phosphorus Java API for accessing FoundationDB indexes",
-	"author": "Swami Kevala",
-	"includes": "com.foundationdb~java~3.0.2", 
-	"worker": true
-}

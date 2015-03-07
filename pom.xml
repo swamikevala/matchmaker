@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ishafoundation</groupId>
+    <artifactId>phosphorus-fullbuild</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <name>Phosphorus full module build</name>
+
+    <parent>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
+    </parent>
+    
+    <properties>
+      <mods.directory>mods</mods.directory>
+      <maven.clean.plugin.version>2.5</maven.clean.plugin.version>
+    </properties>
+    
+    <modules>
+      <module>phosphorus-fdb</module>
+      <module>phosphorus</module>
+    </modules>
+
+    <build>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven.clean.plugin.version}</version>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>${mods.directory}</directory>
+                <excludes>
+                  <exclude>*.zip</exclude>
+                </excludes>
+              </fileset>
+            </filesets>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+</project>

@@ -10,3 +10,8 @@ Only blocking implemented. Load PCC records into FDB using python script. At com
 phosphorus : 0.0.2 / vert.x : 2.1.5 / FoundationDB : 3.0.7 / FDB Java API : 3.0.2
 
 Converted all code to Java. Midway through implementing full matching POC. Current issue with sharing FDB database object.
+
+07/03/2015: Initial POC  
+phosphorus : 0.0.2 / vert.x : 2.1.5 / FoundationDB : 3.0.7 / FDB Java API : 3.0.2
+
+Completed POC. Setup maven project build structure

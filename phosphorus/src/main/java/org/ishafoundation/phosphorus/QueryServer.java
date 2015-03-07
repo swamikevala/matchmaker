@@ -26,7 +26,6 @@ public class QueryServer extends Verticle {
 	final String dataClass = "org.ishafoundation.phosphorus.fdb.FDBData";
 	
 	public void start() {
-		
 		FDBDatabase database = new FDBDatabase();
 		
 		ConcurrentMap<String, FDBDatabase> shared = vertx.sharedData().getMap("shared-map");
@@ -53,12 +52,12 @@ public class QueryServer extends Verticle {
 						final String name = body.getString(0, body.length());
 						String key = makeKey(name);
 						eb.send("index.query", key, new Handler<Message<JsonArray>>() {
-							public void handle(Message<JsonArray> candidateIds) {
-								JsonArray cIdsAndName = candidateIds.body().addString(name);
-								System.out.println(cIdsAndName.toString());
-								eb.send("data.query", cIdsAndName, new Handler<Message<JsonArray>>() {
-									public void handle(Message<JsonArray> matchIds) { 
-										request.response().end(matchIds.body().toString());
+							public void handle(Message<JsonArray> candidateIdsMsg) {
+								JsonObject nameAndCIds = new JsonObject().putString("name", name);
+								nameAndCIds.putArray("candidateIds", candidateIdsMsg.body());
+								eb.send("data.query", nameAndCIds, new Handler<Message<JsonArray>>() {
+									public void handle(Message<JsonArray> matchIdsMsg) { 
+										request.response().end(matchIdsMsg.body().toString());
 									}
 								});
 							}

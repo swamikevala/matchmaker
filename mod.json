@@ -1,0 +1,5 @@
+{ 
+	"main": "org.ishafoundation.phosphorus.AppStarter",
+	"description": "Phosphorus Java module for processing record match queries",
+	"author": "Swami Kevala"
+}

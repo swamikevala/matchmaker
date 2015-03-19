@@ -43,16 +43,22 @@ public class HTTPQuery extends Verticle {
 						//Need to do lots of validation here
 						final JsonObject jsonInput = new JsonObject(input);
 						final String mode = jsonInput.getString("mode");
-						if ( mode == "match" ) {
+						if ( mode == "query" ) {
 							JsonObject attributes = jsonInput.getObject("attributes");
-							eb.send("match.manager", attributes, new Handler<Message<JsonArray>>() {
+							eb.send("match", attributes, new Handler<Message<JsonArray>>() {
 								public void handle(Message<JsonArray> matchIdsMsg) { 
 									request.response().end(matchIdsMsg.body().toString());
 								}
 							});
 						} else if ( mode == "index" ) {
 							String id = jsonInput.getString("id");
-							//To do
+							eb.send("index", id, new Handler<Message<Boolean>>() {
+								public void handle(Message<Boolean> successMsg) {
+									if ( !successMsg.body() ) {
+										//handle error
+									}
+								}
+							});
 						}
 					}
 				});

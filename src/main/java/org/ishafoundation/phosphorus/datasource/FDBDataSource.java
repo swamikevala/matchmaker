@@ -1,4 +1,4 @@
-package org.ishafoundation.phosphorus.database;
+package org.ishafoundation.phosphorus.datasource;
 
 import org.vertx.java.platform.Verticle;
 import org.vertx.java.core.eventbus.EventBus;
@@ -11,7 +11,7 @@ import com.foundationdb.Database;
 import org.ishafoundation.phosphorus.IndexAPI;
 import org.ishafoundation.phosphorus.DataAPI;
 
-public class FDBDatabaseAPI extends Verticle implements IndexAPI, DataAPI {
+public class FDBDataSource extends Verticle implements IndexAPI, DataAPI {
 
 	final int fdbApiVersion = 300;
 	static FDB fdb;

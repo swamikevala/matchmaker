@@ -8,37 +8,9 @@ import org.vertx.java.core.json.JsonObject;
 
 public class Utils {
 
-	public static indianNameNormalize(String s) {
 	
-		s = s.replace("aa", "a");
-		s = s.replace("bb", "b");
-		s = s.replace("ee", "i");
-		s = s.replace("zh", "l");
-		s = s.replace("oo", "u");
-		s = s.replace("bh", "b");
-		s = s.replace("dh", "d");
-		s = s.replace("gh", "g");
-		s = s.replace("jh", "j");
-		s = s.replace("kh", "k");
-		s = s.replace("sh", "s");
-		s = s.replace("th", "t");
-		s = s.replace("ck", "k");
-		s = s.replace("kk", "k");
-		s = s.replace("nn", "n");
-		s = s.replace("mm", "m");
-		s = s.replace("pp", "p");
-		s = s.replace("ll", "l");
-		s = s.replace("ty", "ti");
-		s = s.replace("ot", "od");
-		s = s.replace("iya", "ia");
-		s = s.replace("ya", "ia");
-		s = s.replace("sv", "s");
-		s = s.replace("sw", "s");
-		s = s.replace("my", "mi");
-		return s;
-	}
 
-	public static sortWords(String s) {
+	public static String sortTokens(String s) {
 	
 		StringBuilder builder = new StringBuilder();
 		String [] words = s.split("[\\s]");

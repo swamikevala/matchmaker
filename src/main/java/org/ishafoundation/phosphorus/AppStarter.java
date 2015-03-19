@@ -4,26 +4,21 @@ import org.vertx.java.platform.Verticle;
 
 public class AppStarter extends Verticle {
 
+	final String matchManagerFQCN = "org.ishafoundation.phosphorus.MatchManager";
+
 	public void start() {
 	
-		JsonObject appConfig = container.config();
+		final JsonObject appConfig = container.config();
+		
+		final String queryFQCN = appConfig.getObject("query_config").getString("query_class");
+		final String databaseFQCN = appConfig.getObject("database_config").getString("database_class");
+		//final String processingFQCN = "org.ishafoundation.phosphorus.Process";
+		
+		container.deployVerticle(queryFQN); 
+		container.deployVerticle(matchManagerFQCN, appConfig);
 
-		//JsonObject verticle1Config = appConfig.getObject("verticle1_conf");
-		
-		// Start the verticles that make up the app
-		
-		//DB specific class for LOW LEVEL db operations (FDB, MySQL. MongoDB etc...)
-		//Not specific to either index or data related queries 
-		
-		final String queryClass = "org.ishafoundation.phosphorus.query.HTTPQuery";
-		final String managerClass = "org.ishafoundation.phosphorus.MatchManager";
-		final String databaseClass = "org.ishafoundation.phosphorus.database.FDBDatabaseAPI";
-		//final String processingClass = "org.ishafoundation.phosphorus.Process";
-		
-		container.deployVerticle(queryClass); 
-		container.deployVerticle(managerClass);
-		container.deployWorkerVerticle(databaseClass); 
-		//container.deployWorkerVerticle(processingClass); 
+		//container.deployWorkerVerticle(databaseFQCN); 
+		//container.deployWorkerVerticle(processingFQCN); 
 		
 	}
 

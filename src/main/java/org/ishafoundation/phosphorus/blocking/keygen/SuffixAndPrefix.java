@@ -1,9 +1,9 @@
 package org.ishafoundation.phosphorus.blocking.keygen;
 
 import java.util.Set;
+import java.util.HashSet;
 
-import org.ishafoundation.phosphorus.blocking.IndexKey;
-import org.ishafoundation.phosphorus.blocking.BaseKey;
+import org.vertx.java.core.json.JsonObject;
 
 public class SuffixAndPrefix implements KeyGenerator {
 
@@ -13,17 +13,18 @@ public class SuffixAndPrefix implements KeyGenerator {
 		this.params = params;
 	}
 
-	public Set<IndexKey> generateKeys(BaseKey baseKey) {
+	@Override
+	public Set<String> generateKeys(String value) {
 		int minKeyLength = params.getInteger("min-length");
-		String baseValue = baseKey.getValue();
-		Set<IndexKey> keyList;
-		keyList.add(baseValue);
-		int N = baseValue.length() - minKeyLength + 1;
-		if ( baseValue.length() > minKeyLength ) {
+		Set<String> keys = new HashSet();
+		keys.add(value);
+		int N = value.length() - minKeyLength + 1;
+		if ( value.length() > minKeyLength ) {
 			for ( int x = 1; x < N; x = x+1 ) {
-				keyList.add(new IndexKey(baseValue.substring(x), baseKey), 0);
-				keyList.add(new IndexKey(baseValue.substring(0, baseKey.getlength() - x), baseKey), 0);
+				keys.add(value.substring(x));
+				keys.add(value.substring(0, value.length() - x));
 			}
-		return keyList;
+		}
+		return keys;
 	}
 }

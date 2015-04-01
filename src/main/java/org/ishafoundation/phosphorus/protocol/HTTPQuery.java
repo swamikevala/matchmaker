@@ -1,4 +1,4 @@
-package org.ishafoundation.phosphorus.query;
+package org.ishafoundation.phosphorus.protocol;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,14 +18,17 @@ import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 
-import org.ishafoundation.phosphorus.Database;
-
 public class HTTPQuery extends Verticle {
+	
+	private JsonObject config;
+	private EventBus eb;
+	private HttpServer server;
 	
 	public void start() {
 		
-		final EventBus eb = vertx.eventBus();
-		final HttpServer server = vertx.createHttpServer();
+		config = container.config();
+		eb = vertx.eventBus();
+		server = vertx.createHttpServer();
 		
 		server.requestHandler(new Handler<HttpServerRequest>() {
 			public void handle(final HttpServerRequest request) {
@@ -41,29 +44,25 @@ public class HTTPQuery extends Verticle {
 					public void handle() {
 						final String input = body.getString(0, body.length());
 						//Need to do lots of validation here
-						final JsonObject jsonInput = new JsonObject(input);
-						final String mode = jsonInput.getString("mode");
-						if ( mode == "query" ) {
-							JsonObject attributes = jsonInput.getObject("attributes");
-							eb.send("match", attributes, new Handler<Message<JsonArray>>() {
-								public void handle(Message<JsonArray> matchIdsMsg) { 
+						final JsonObject jInput = new JsonObject(input);
+						final String mode = jInput.getString("mode");
+						if ( mode.equals("query") ) {
+							eb.send("match", jInput, new Handler<Message<JsonObject>>() {
+								public void handle(Message<JsonObject> matchIdsMsg) { 
 									request.response().end(matchIdsMsg.body().toString());
 								}
 							});
-						} else if ( mode == "index" ) {
-							String id = jsonInput.getString("id");
-							eb.send("index", id, new Handler<Message<Boolean>>() {
-								public void handle(Message<Boolean> successMsg) {
-									if ( !successMsg.body() ) {
-										//handle error
-									}
+						} else if ( mode.equals("index") ) {
+							eb.send("index", jInput, new Handler<Message<JsonObject>>() {
+								public void handle(Message<JsonObject> indexMsg) {
+									request.response().end(indexMsg.body().toString());
 								}
 							});
 						}
 					}
 				});
 			}
-		}).listen(8080, "localhost");
+		}).listen(config.getInteger("port"), config.getString("url"));
 	}
 	
 }

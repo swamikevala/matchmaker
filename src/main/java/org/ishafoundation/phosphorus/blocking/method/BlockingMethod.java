@@ -2,14 +2,14 @@ package org.ishafoundation.phosphorus.blocking.method;
 
 import java.util.Set;
 
-import org.ishafoundation.phosphorus.blocking.IndexKey;
-import org.ishafoundation.phosphorus.blocking.api.IndexAPI;
+import org.ishafoundation.phosphorus.api.IndexAPI;
 
 public interface BlockingMethod {
 
-	public Set<String> queryIndex(IndexAPI api, Set<IndexKey> keys);
+	public Set<String> queryIndex(IndexAPI api, String attribute, String key, String connId);
 
-	public void updateIndex(IndexAPI api, String id, Set<IndexKey> keys);
+	public void updateIndex(IndexAPI api, String attribute, String key, String baseKey, String id, String connId);
 	
 }
+
 

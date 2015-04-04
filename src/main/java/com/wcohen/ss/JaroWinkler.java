@@ -1,6 +1,6 @@
 package com.wcohen.ss;
 
-import org.ishafoundation.phosphorus.comparators.Comparator;
+import org.ishafoundation.matchmaker.comparators.Comparator;
 import org.vertx.java.core.json.JsonObject;
 
 /**

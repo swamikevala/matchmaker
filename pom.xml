@@ -4,16 +4,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ishafoundation</groupId>
-  <artifactId>phosphorus</artifactId>
+  <artifactId>matchmaker</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.2</version>
-  <name>Phosphorus Match Engine</name>
+  <version>0.1</version>
+  <name>matchmaker matching engine</name>
   <url>http://maven.apache.org</url>
 
   <parent>
-     <groupId>org.ishafoundation</groupId>
-     <artifactId>phosphorus-fullbuild</artifactId>
-     <version>1.0</version>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
   </parent>
 
   <properties>
@@ -26,7 +26,6 @@
     <!--Dependency versions-->
     <vertx.version>2.1.5</vertx.version>
     <fdb.java.version>3.0.2</fdb.java.version>
-    <phosphorus.fdb.version>0.0.2</phosphorus.fdb.version>
     <wit.simmetrics.version>1.6.2</wit.simmetrics.version>
 
     <!--Plugin versions-->
@@ -71,16 +70,16 @@
     </dependency>
     
     <dependency>
-      <groupId>org.ishafoundation</groupId>
-      <artifactId>phosphorus-fdb</artifactId>
-      <version>${phosphorus.fdb.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>uk.ac.shef</groupId>
       <artifactId>wit.simmetrics</artifactId>
       <version>${wit.simmetrics.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<version>5.1.34</version>
+	<scope>compile</scope>
     </dependency>
   </dependencies>
 

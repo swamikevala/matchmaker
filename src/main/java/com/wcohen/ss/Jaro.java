@@ -2,7 +2,7 @@ package com.wcohen.ss;
 
 import com.wcohen.ss.api.*;
 
-import org.ishafoundation.phosphorus.comparators.Comparator;
+import org.ishafoundation.matchmaker.comparators.Comparator;
 import org.vertx.java.core.json.JsonObject;
 
 /**

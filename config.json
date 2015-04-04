@@ -1,0 +1,229 @@
+{
+	"rules" : 
+	[
+		{	
+			"type" : "match",
+			"comparators" : {
+				"mobile" : {
+					"class" : "Jaro",
+					"threshold" : 0.9
+				}
+			}
+		},
+		{	
+			"type" : "match",
+			"comparators" : {
+				"name" : {
+					"class" : "Jaro",
+					"threshold" : 0.9
+				}
+			}
+		},
+		{	
+			"type" : "match",
+			"comparators" : {
+				"email" : {
+					"class" : "Jaro",
+					"threshold" : 0.9
+				}
+			}
+		},
+		{	
+			"type" : "suspect",
+			"comparators" : {
+				"email" : {
+					"blocking" : true,
+					"class" : "Jaro",
+					"threshold" : 0.9
+				},
+				"name" : {
+					"blocking" : true,
+					"class" : "Jaro",
+					"threshold" : 0.8
+				}
+			}
+		},
+		{	
+			"type" : "match",
+			"comparators" : {
+				"name" : {
+					"class" : "Jaro",
+					"threshold" : 0.8
+				},
+				"mobile" : {
+					"blocking" : false,
+					"class" : "Jaro",
+					"threshold" : 0.8
+				}
+			}
+		}
+	],
+
+	"blocking" : { 
+		"name" : { 	
+			"base-keygen" : {
+				"class" : "IndianNameNormalizeBKG",
+				"params" : {
+					"lower-case" : true,
+					"remove-chars" : "[^a-z ]", 
+					"sort-tokens" : true
+				}
+			},
+			"keygen" : { 
+				"class" : "SuffixAndPrefix",
+				"params" : { 
+					"min-length" : 5
+				}
+			},
+			"method" : {
+				"class" : "BoundedBlockingMethod",
+				"params" : { 
+					"max-block-size" : 100
+				}
+			}
+		},
+		"email" : { 
+			"base-keygen" : {
+				"class" : "DefaultBaseKeyGenerator",
+				"params" : { 
+					"lower-case" : true,
+					"remove-chars" : "[^0-9a-z]",
+					"sort-tokens" : false
+				}
+			},
+			"keygen" : { 
+				"class" : "SuffixAndPrefix",
+				"params" : { 
+					"min-length" : 5
+				}
+			},
+			"method" : {
+				"class" : "BoundedBlockingMethod",
+				"params" : { 
+					"max-block-size" : 100
+				}
+			}
+		},
+		"mobile" : { 
+			"base-keygen" : {
+				"class" : "DefaultBaseKeyGenerator",
+				"params" : {
+					"remove-chars" : "[^0-9]", 
+					"sort-tokens" : false
+				}
+			},
+			"keygen" : { 
+				"class" : "RemovePartKG",
+				"params" : { 
+					"max-length" : 1
+				}
+			},
+			"method" : {
+				"class" : "BoundedBlockingMethod",
+				"params" : { 
+					"max-block-size" : 100
+				}
+			}
+		}
+	},
+	
+	"index-api" : {
+		"class" : "SQLIndexAPI",
+		"params" : { 
+			"connection" : {
+				"driver" : "com.mysql.jdbc.Driver",
+				"dburl" : "jdbc:mysql://localhost/ishadb",
+				"user" : "talend",
+				"password" : "talend"
+			},
+			"prefix" : "pcc_match_index_"
+		}
+	},
+	
+	"data-source-api" : {
+		"class" : "SQLDataSourceAPI",
+		"params" : { 
+			"connection" : {
+				"driver" : "com.mysql.jdbc.Driver",
+				"dburl" : "jdbc:mysql://localhost/ishadb",
+				"user" : "talend",
+				"password" : "talend" 
+			},
+			"tables" : 
+			[	
+				{
+					"alias" : "participant",
+					"name" : "pcc_participant_sample_50k",
+					"id-field" : "Pam_Participant_Id"
+				},
+				{
+					"alias" : "program",
+					"name" : "pcc_program_sample_10k",
+					"id-field" : "Pap_Participant_Id"
+				}
+			],
+			"mappings" : {
+				"name" : 
+				[
+					{ 
+						"table" : "participant",
+						"fields" : [ "Pam_Participant_Name" ]
+					},
+					{	
+						"table" : "program",
+						"fields" : [ "Pap_Participant_Name" ]
+					}
+				],
+				"email" :  
+				[
+					{
+						"table" : "participant",
+						"fields" : [ "Pam_Email_ID", "Pam_Oemail_Id" ]
+					}
+				],
+				"phone" :
+				[
+					{ 
+						"table" : "participant",
+						"fields" : [ "Pam_Mobile_Phone", "Pam_Mobile_Phone1", "Pam_Work_Phone", "Pam_Home_Phone" ]
+					},
+					{ 
+						"table" : "program",
+						"fields" : [ "Pap_Mobile_Phone" ]
+					}
+				]
+			}
+		}
+	},
+	
+	"query" : {
+		"class" : "HTTPQuery",
+		"params" : {
+			"url" : "localhost",
+			"port" : 8080
+		}
+	},
+	
+	"base" : "org.ishafoundation.matchmaker",
+	
+	"classes" : {
+		"Levenshtein" : "$base.comparators.Levenshtein",
+		"Levenstein" : "com.wcohen.ss.Levenstein",
+		"Jaro" : "com.wcohen.ss.Jaro",
+		"JaroWinkler" : "com.wcohen.ss.JaroWinkler",
+		"Jaccard" : "com.wcohen.ss.Jaccard",
+		"AffineGap" : "com.wcohen.ss.AffineGap",
+		"DefaultBaseKeyGenerator" : "$base.blocking.basekeygen.DefaultBaseKeyGenerator",
+		"DefaultKeyGenerator" : "$base.blocking.keygen.DefaultKeyGenerator",
+		"SuffixAndPrefix" : "$base.blocking.keygen.SuffixAndPrefix",
+		"RemovePartKG" : "$base.blocking.keygen.RemovePartKG",
+		"RobustMultiBlockBounded" : "$base.blocking.method.RobustMultiBlockBounded",
+		"DefaultBlockingMethod" : "$base.blocking.method.DefaultBlockingMethod",
+		"BoundedBlockingMethod" : "$base.blocking.method.BoundedBlockingMethod",
+		"SQLIndexAPI" : "$base.api.SQLIndexAPI",
+		"SQLDataSourceAPI" : "$base.api.SQLDataSourceAPI",
+		"IndianNameNormalizeBKG" : "$base.blocking.basekeygen.IndianNameNormalizeBKG",
+		"HTTPQuery" : "$base.protocol.HTTPQuery"
+	}
+				
+}

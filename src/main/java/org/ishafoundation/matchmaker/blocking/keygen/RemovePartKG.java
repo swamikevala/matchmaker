@@ -3,19 +3,18 @@ package org.ishafoundation.matchmaker.blocking.keygen;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
 
 public class RemovePartKG implements KeyGenerator {
 
-	private final JsonObject params;
+	private int maxPartLength;
 
 	public RemovePartKG(JsonObject params) {
-		this.params = params;
+		maxPartLength = params.get("max-length").getAsInt();
 	}
 	
 	@Override
 	public Set<String> generateKeys(String value) {
-		int maxPartLength = params.getInteger("max-length");
 		Set<String> keys = new HashSet();
 		keys.add(value);
 		int N = value.length();

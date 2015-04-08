@@ -5,12 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Iterator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 public class SQLDataSourceAPI extends SQLConnectionAPI implements DataSourceAPI {
 
@@ -21,21 +24,27 @@ public class SQLDataSourceAPI extends SQLConnectionAPI implements DataSourceAPI 
 	public SQLDataSourceAPI(JsonObject params) {
 		super(params);
 		tableMap = new HashMap<String, Table>();
-		for ( Map table : (List<Map>) params.getArray("tables").toList() ) {
-			JsonObject jTable = new JsonObject(table);
-			String alias = jTable.getString("alias");
-			tableMap.put(alias, new Table(jTable.getString("name"), jTable.getString("id-field")));
-		//Can also check that tables (and id field) exists, and that id index is defined
+		Iterator<JsonElement> itr = params.get("tables").getAsJsonArray().iterator();
+		while ( itr.hasNext() ) {
+			JsonObject jTable = itr.next().getAsJsonObject();
+			String alias = jTable.get("alias").getAsString();
+			tableMap.put(alias, new Table(jTable.get("name").getAsString(), jTable.get("id-field").getAsString()));
 		}
+			
+		//Can also check that tables (and id field) exists, and that id index is defined
 		
 		fieldMap = new HashMap<Field, String>();
-		for ( String attribute : params.getObject("mappings").getFieldNames() ) {
-			for ( Map fields : (List<Map>) params.getObject("mappings").getArray(attribute).toList() ) {
-				JsonObject jFields = new JsonObject(fields);
-				String tableAlias = jFields.getString("table");
+		JsonObject jMappings = params.get("mappings").getAsJsonObject();
+		for ( Map.Entry<String, JsonElement> jMappedFieldsArray : jMappings.entrySet() ) {
+			itr = jMappedFieldsArray.getValue().getAsJsonArray().iterator();
+			while ( itr.hasNext() ) {
+				JsonObject jFields = itr.next().getAsJsonObject();
+				String tableAlias = jFields.get("table").getAsString();
 				Table table = tableMap.get(tableAlias); //Handle exception if not defined
-				for ( String field : (List<String>) jFields.getArray("fields").toList() ) {
-					fieldMap.put(new Field(table, field), attribute);
+				Iterator<JsonElement> itr2 = jFields.get("fields").getAsJsonArray().iterator();
+				while ( itr2.hasNext() ) {
+					String field = itr2.next().getAsString();
+					fieldMap.put(new Field(table, field), jMappedFieldsArray.getKey());
 				}
 			}
 		}
@@ -53,7 +62,7 @@ public class SQLDataSourceAPI extends SQLConnectionAPI implements DataSourceAPI 
 						ResultSet rs = ps.executeQuery(); ) {
 						while (rs.next()) {
 						//Should do better check for dodgy values
-							if ( rs.getString(field.getName()) != null && rs.getString(field.getName()) != "" ) {
+							if ( rs.getString(field.getName()) != null && !rs.getString(field.getName()).equals("") ) {
 								values.add(rs.getString(field.getName()));
 							}
 						}

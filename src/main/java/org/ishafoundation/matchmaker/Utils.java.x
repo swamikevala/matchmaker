@@ -8,7 +8,9 @@ import java.util.regex.Matcher;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.json.JsonElement;
 
+
 public class Utils {
+
 
 	public static JsonObject getConfigObject(JsonObject config, String path) {
 		JsonObject jo = config;
@@ -31,10 +33,18 @@ public class Utils {
 		return jo;
 	}
 	
-	public static Object getInstance(JsonObject config, String path) {
+	public static Object getInstance(JsonObject jConfig, String path) {
+		
+		Gson gson = new Gson(); 
+		Config config = gson.fromJson(jConfig.toString(), Config.class); 
+		
+		Map<String, Object> paramsObjectMap = new HashMap<String, Object>();
 		JsonObject conf = Utils.getConfigObject(config, path);
 		String clName = conf.getString("class");
 		JsonObject params = conf.containsField("params") ? conf.getObject("params") : new JsonObject("{}");
+		for ( String field : params.getFieldNames() ) {
+			if ( field.equals("class") ) {
+				paramsObjectMap.put(
 		return Utils.instantiateConfigClass(config, clName, params);
 	}
 	

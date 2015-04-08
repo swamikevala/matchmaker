@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
 
 public abstract class SQLConnectionAPI implements ConnectionAPI {
 
@@ -19,11 +19,11 @@ public abstract class SQLConnectionAPI implements ConnectionAPI {
 	protected Map<String, Connection> sustainedConnections;
 	
 	protected SQLConnectionAPI(JsonObject params) {
-		JsonObject con = params.getObject("connection");
-		this.jdbc_driver = con.getString("driver");
-		this.db_url = con.getString("dburl");
-		this.user = con.getString("user");
-		this.password = con.getString("password");
+		JsonObject con = params.get("connection").getAsJsonObject();
+		this.jdbc_driver = con.get("driver").getAsString();
+		this.db_url = con.get("dburl").getAsString();
+		this.user = con.get("user").getAsString();
+		this.password = con.get("password").getAsString();
 		this.sustainedConnections = new HashMap<String, Connection>();
 		try {
 			Class.forName(jdbc_driver);

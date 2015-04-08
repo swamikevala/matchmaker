@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.DatabaseMetaData;
 import java.util.UUID;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
 
 public class SQLIndexAPI extends SQLConnectionAPI implements IndexAPI {
 
@@ -19,7 +19,7 @@ public class SQLIndexAPI extends SQLConnectionAPI implements IndexAPI {
 
 	public SQLIndexAPI(JsonObject params) {
 		super(params);
-		this.prefix = params.getString("prefix");
+		prefix = params.get("prefix").getAsString();
 	}
 	
 	//delete if exists

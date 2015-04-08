@@ -1,29 +1,17 @@
 package org.ishafoundation.matchmaker.blocking.basekeygen;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
+
 
 public class IndianNameNormalizeBKG extends AbstractBaseKeyGenerator implements BaseKeyGenerator {
 
-	private final JsonObject params;
-
 	public IndianNameNormalizeBKG(JsonObject params) {
-		this.params = params;
+		super(params);
 	}
-	//Need to put this logic in abstract class
+
 	public String generateBaseKey(String value) {
-		String newValue = value;
-		if ( params.containsField("lower-case") ) {
-			newValue = this.makeLowerCase(newValue);
-		}
-		if ( params.containsField("remove-chars") ) {
-			String regexp = params.getString("remove-chars");
-			newValue = this.removeChars(newValue, regexp);
-		}
-		if ( params.containsField("sort-tokens") ) {
-			if ( params.getBoolean("sort-tokens") ) {
-				newValue = this.sortTokens(newValue);
-			}
-		}
+	
+		String newValue = applyTransformations(value);
 		newValue = indianNameNormalize(newValue);
 		newValue.replaceAll(" ", "");
 		return newValue;

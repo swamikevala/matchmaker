@@ -1,125 +1,100 @@
 {
-	"rules" : 
-	[
-		{	
-			"type" : "match",
-			"comparators" : {
-				"mobile" : {
-					"class" : "Jaro",
-					"threshold" : 0.9
+	"metrics" : 
+	{
+		"name" : {
+			"comparator-class" : {
+				"name" : "SoftTFIDF",
+				"params" : {
+					"token-comparator-class" : {
+						"name" : "Jaro"
+					},
+					"token-threshold" : 0.9
 				}
-			}
+			},
+			"threshold" : 0.9
 		},
-		{	
-			"type" : "match",
-			"comparators" : {
-				"name" : {
-					"class" : "Jaro",
-					"threshold" : 0.9
-				}
-			}
+		"email" : {
+			"comparator-class" : {
+				"name" : "Jaro"
+			},
+			"threshold" : 0.9
 		},
-		{	
-			"type" : "match",
-			"comparators" : {
-				"email" : {
-					"class" : "Jaro",
-					"threshold" : 0.9
-				}
-			}
-		},
-		{	
-			"type" : "suspect",
-			"comparators" : {
-				"email" : {
-					"blocking" : true,
-					"class" : "Jaro",
-					"threshold" : 0.9
-				},
-				"name" : {
-					"blocking" : true,
-					"class" : "Jaro",
-					"threshold" : 0.8
-				}
-			}
-		},
-		{	
-			"type" : "match",
-			"comparators" : {
-				"name" : {
-					"class" : "Jaro",
-					"threshold" : 0.8
-				},
-				"mobile" : {
-					"blocking" : false,
-					"class" : "Jaro",
-					"threshold" : 0.8
-				}
-			}
+		"phone" : {
+			"comparator-class" : {
+				"name" : "Jaro"
+			},
+			"threshold" : 0.95
 		}
-	],
+	},
 
-	"blocking" : { 
+	"scoring-method-class" : {
+		"name" : "GeometricMean",
+		"params" : {
+			"degree" : 2
+		}
+	},
+	
+	"blocking-indexes" : { 
 		"name" : { 	
-			"base-keygen" : {
-				"class" : "IndianNameNormalizeBKG",
+			"base-keygen-class" : {
+				"name" : "IndianNameNormalizeBKG",
 				"params" : {
 					"lower-case" : true,
 					"remove-chars" : "[^a-z ]", 
 					"sort-tokens" : true
 				}
 			},
-			"keygen" : { 
-				"class" : "SuffixAndPrefix",
+			"keygen-class" : { 
+				"name" : "SuffixAndPrefix",
 				"params" : { 
 					"min-length" : 5
 				}
 			},
-			"method" : {
-				"class" : "BoundedBlockingMethod",
+			"method-class" : {
+				"name" : "BoundedBlockingMethod",
 				"params" : { 
 					"max-block-size" : 100
 				}
 			}
 		},
 		"email" : { 
-			"base-keygen" : {
-				"class" : "DefaultBaseKeyGenerator",
+			"base-keygen-class" : {
+				"name" : "DefaultBaseKeyGenerator",
 				"params" : { 
 					"lower-case" : true,
 					"remove-chars" : "[^0-9a-z]",
 					"sort-tokens" : false
 				}
 			},
-			"keygen" : { 
-				"class" : "SuffixAndPrefix",
+			"keygen-class" : { 
+				"name" : "SuffixAndPrefix",
 				"params" : { 
 					"min-length" : 5
 				}
 			},
-			"method" : {
-				"class" : "BoundedBlockingMethod",
+			"method-class" : {
+				"name" : "BoundedBlockingMethod",
 				"params" : { 
 					"max-block-size" : 100
 				}
 			}
 		},
-		"mobile" : { 
-			"base-keygen" : {
-				"class" : "DefaultBaseKeyGenerator",
+		"phone" : { 
+			"base-keygen-class" : {
+				"name" : "DefaultBaseKeyGenerator",
 				"params" : {
 					"remove-chars" : "[^0-9]", 
 					"sort-tokens" : false
 				}
 			},
-			"keygen" : { 
-				"class" : "RemovePartKG",
+			"keygen-class" : { 
+				"name" : "RemovePartKG",
 				"params" : { 
 					"max-length" : 1
 				}
 			},
-			"method" : {
-				"class" : "BoundedBlockingMethod",
+			"method-class" : {
+				"name" : "BoundedBlockingMethod",
 				"params" : { 
 					"max-block-size" : 100
 				}
@@ -127,8 +102,8 @@
 		}
 	},
 	
-	"index-api" : {
-		"class" : "SQLIndexAPI",
+	"index-api-class" : {
+		"name" : "SQLIndexAPI",
 		"params" : { 
 			"connection" : {
 				"driver" : "com.mysql.jdbc.Driver",
@@ -140,8 +115,8 @@
 		}
 	},
 	
-	"data-source-api" : {
-		"class" : "SQLDataSourceAPI",
+	"data-source-api-class" : {
+		"name" : "SQLDataSourceAPI",
 		"params" : { 
 			"connection" : {
 				"driver" : "com.mysql.jdbc.Driver",
@@ -196,7 +171,7 @@
 		}
 	},
 	
-	"query" : {
+	"query-class" : {
 		"class" : "HTTPQuery",
 		"params" : {
 			"url" : "localhost",
@@ -210,6 +185,7 @@
 		"Levenshtein" : "$base.comparators.Levenshtein",
 		"Levenstein" : "com.wcohen.ss.Levenstein",
 		"Jaro" : "com.wcohen.ss.Jaro",
+		"SoftTFIDF" : "com.wcohen.ss.SoftTFIDF",
 		"JaroWinkler" : "com.wcohen.ss.JaroWinkler",
 		"Jaccard" : "com.wcohen.ss.Jaccard",
 		"AffineGap" : "com.wcohen.ss.AffineGap",
@@ -223,7 +199,8 @@
 		"SQLIndexAPI" : "$base.api.SQLIndexAPI",
 		"SQLDataSourceAPI" : "$base.api.SQLDataSourceAPI",
 		"IndianNameNormalizeBKG" : "$base.blocking.basekeygen.IndianNameNormalizeBKG",
-		"HTTPQuery" : "$base.protocol.HTTPQuery"
+		"HTTPQuery" : "$base.protocol.HTTPQuery",
+		"GeometricMean" : "$base.scoring.GeometricMean"
 	}
 				
 }

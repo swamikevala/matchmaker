@@ -1,4 +1,4 @@
-package org.ishafoundation.matchmaker.comparators;
+package org.ishafoundation.matchmaker;
 
 /**
  * An operator which compares two values for similarity, and returns a

@@ -3,19 +3,18 @@ package org.ishafoundation.matchmaker.blocking.keygen;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.vertx.java.core.json.JsonObject;
+import com.google.gson.JsonObject;
 
 public class SuffixAndPrefix implements KeyGenerator {
 
-	private final JsonObject params;
+	private int minKeyLength;
 
 	public SuffixAndPrefix(JsonObject params) {
-		this.params = params;
+		minKeyLength = params.get("min-length").getAsInt();
 	}
 
 	@Override
 	public Set<String> generateKeys(String value) {
-		int minKeyLength = params.getInteger("min-length");
 		Set<String> keys = new HashSet();
 		keys.add(value);
 		int N = value.length() - minKeyLength + 1;

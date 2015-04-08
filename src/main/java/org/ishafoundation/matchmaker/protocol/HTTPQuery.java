@@ -53,13 +53,13 @@ public class HTTPQuery extends Verticle {
 						if ( jInput != null ) {
 							String mode = jInput.getString("mode");
 							if ( mode.equals("query") ) {
-								eb.send("match", jInput, new Handler<Message<JsonObject>>() {
-									public void handle(Message<JsonObject> matchIdsMsg) { 
-										request.response().end(matchIdsMsg.body().toString());
+								eb.send("query", jInput, new Handler<Message<JsonArray>>() {
+									public void handle(Message<JsonArray> resultsMsg) { 
+										request.response().end(resultsMsg.body().toString());
 									}
 								});
-							} else if ( mode.equals("index") ) {
-								eb.send("index", jInput, new Handler<Message<JsonObject>>() {
+							} else if ( mode.equals("update") ) {
+								eb.send("update", jInput, new Handler<Message<JsonObject>>() {
 									public void handle(Message<JsonObject> indexMsg) {
 										request.response().end(indexMsg.body().toString());
 									}
@@ -69,7 +69,7 @@ public class HTTPQuery extends Verticle {
 					}
 				});
 			}
-		}).listen(config.getInteger("port"), config.getString("url"));
+		}).listen(8080, "localhost"); //.listen(config.getInteger("port"), config.getString("url"));
 	}
 	
 }

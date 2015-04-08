@@ -2,8 +2,8 @@ package com.wcohen.ss;
 
 import com.wcohen.ss.api.*;
 
-import org.ishafoundation.matchmaker.comparators.Comparator;
-import org.vertx.java.core.json.JsonObject;
+import org.ishafoundation.matchmaker.Comparator;
+
 
 /**
  * Jaro distance metric. From 'An Application of the Fellegi-Sunter
@@ -13,11 +13,6 @@ import org.vertx.java.core.json.JsonObject;
 
 public class Jaro extends AbstractStringDistance implements Comparator
 {
-	private final JsonObject params;
-
-	public Jaro(JsonObject params) {
-		this.params = params;
-	}
 
 	public String toString() { return "[Jaro]"; }
 
